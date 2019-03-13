@@ -6,7 +6,7 @@ An app for crochet lovers who want to share projects.  Check out the wiki for mo
 
 * PostgreSQL
 * Express/Node.js
-* GraphQL
+* GraphQL (Apollo Implementation)
 * Typescript
 * React/Redux
 * Bootstrap (CSS)
