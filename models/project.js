@@ -7,6 +7,7 @@ const project = (sequelize, DataTypes) => {
             type: DataTypes.TEXT
         }
     });
+    
     Project.associate = models => {
         Project.belongsTo(models.User)
     }
