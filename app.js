@@ -58,6 +58,12 @@ let projects = {
         description: "Luke Skywalker amigurimu, using a 5mm hook...",
         title: "Luke Skywalker",
         userId: "1",
+    },
+    2: {
+        id: "2",
+        description: "Yoshi amigurumi, using a 6mm hook and some green yarn.",
+        title: "Yoshi",
+        userId: "2"
     }
 }
 //resolvers are used to return data for fields from the schema
@@ -91,6 +97,13 @@ const resolvers = {
     Project: {
         user: project => {
             return users[project.userId]
+        }
+    },
+    User: {
+        projects: user => {
+            return Object.values(projects).filter(
+                project => project.userId == user.id
+            )
         }
     }
 }
