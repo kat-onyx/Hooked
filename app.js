@@ -4,6 +4,7 @@ const { buildSchema } = require('graphql');
 //The library used to build a schema and to execute queries on that schema. (Important peer dependenct of Apollo Server.)
 const { ApolloServer, gql } = require('apollo-server-express');
 const cors = require('cors');
+const uuidv4 = require('uuid/v4');
 
 const app = express();
 
@@ -37,6 +38,10 @@ const schema = gql(`
         description: String!
         title: String!
         user: User!
+    }
+
+    type Mutation {
+        createProject(title: String!, description: String!): Project!
     }
 `);
 // "!" means non-nullable field.
@@ -104,6 +109,23 @@ const resolvers = {
             return Object.values(projects).filter(
                 project => project.userId == user.id
             )
+        }
+    },
+    Mutation: {
+        //mutations also get a resolver. { me } here is the signed in user.
+        createProject: (parent, { title, description }, { me }) => {
+            //uuidv4 here will allow us to create a new project with a unique identifier.
+            const id = uuidv4();
+            const project = {
+                id,
+                title,
+                description,
+                userId: me.id
+            };
+            //doing this for now since our resolvers are not connected to the db
+            projects[id] = project;
+            users[me.id].messagesIds.push(id);
+            return project;
         }
     }
 }
