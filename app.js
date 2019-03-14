@@ -14,22 +14,52 @@ app.use(cors())
 //defines the shape of the data & which way the data can be fetched.
 //string representing graphql schema
 //gql = template literal tag used for writing GraphQL within JS
+//the graphql "query" is for fetching data, similar to the get request. Acts as an entry point.
 const schema = gql(`
     type Query {
-        users: [Users!]
+        users: [User!]
         me: User
         user(id: ID!): User
+
+        projects: [Project!]!
+        project(id: ID!): Project!
     }
 
     type User {
         id: ID!
         username: String!
-        password: String!
-        email: String!
+        email: String
+        projects: [Project!]
+    }
+
+    type Project {
+        id: ID!
+        description: String!
+        title: String!
+        user: User!
     }
 `);
 // "!" means non-nullable field.
+let users = {
+    1: {
+        id: '1',
+        username: 'kat',
+        projectIds: [1]
+    },
+    2: {
+        id: '2',
+        username: 'jon'
+    }
+}
 
+let projects = {
+    1: {
+        id: "1",
+        description: "Luke Skywalker amigurimu, using a 5mm hook...",
+        title: "Luke Skywalker",
+        userId: "1",
+    }
+}
 //resolvers are used to return data for fields from the schema
 //map functions that implement the schema
 //must add a resolver for every type of query
@@ -38,21 +68,38 @@ const resolvers = {
         users: () => {
             return Object.values(users);
         },
-        me: () => {
-            return {
-                username: "kat",
-                email: "kat@gmail.com",
-                password: ""
-            }
+        //third arg is context, can be used to inject dependencies.  Pass context in on ApolloServer initialization.
+        me: (parent, args, { me }) => {
+            return me;
         },
-        user: (parent, {id}) => {
+        user: (parent, { id }) => {
             return users[id];
+        },
+        projects: () => {
+            return Object.values(projects)
+        },
+        project: (parent, { id }) => {
+            return projects[id];
+        }
+    },
+    //User not needed here since the default query takes care of the username. Username resolver function is redundant!
+    // User: {
+    //     username: parent => {
+    //         return parent.username
+    //     }
+    // }
+    Project: {
+        user: project => {
+            return users[project.userId]
         }
     }
 }
 const server = new ApolloServer({
     typeDefs: schema,
-    resolvers
+    resolvers,
+    context: {
+        me: users[1],
+    }
 });
 //app here is from the existing Express app. (See above.) Integrating Apollo Server with Express server.
 server.applyMiddleware({ app, path: '/graphql'});
