@@ -26,6 +26,11 @@ const schema = gql(`
         project(id: ID!): Project!
     }
 
+    type Mutation {
+        createProject(title: String!, description: String!): Project!
+        deleteProject(id: ID!): Boolean!
+    }
+
     type User {
         id: ID!
         username: String!
@@ -40,9 +45,6 @@ const schema = gql(`
         user: User!
     }
 
-    type Mutation {
-        createProject(title: String!, description: String!): Project!
-    }
 `);
 // "!" means non-nullable field.
 let users = {
@@ -99,18 +101,6 @@ const resolvers = {
     //         return parent.username
     //     }
     // }
-    Project: {
-        user: project => {
-            return users[project.userId]
-        }
-    },
-    User: {
-        projects: user => {
-            return Object.values(projects).filter(
-                project => project.userId == user.id
-            )
-        }
-    },
     Mutation: {
         //mutations also get a resolver. { me } here is the signed in user.
         createProject: (parent, { title, description }, { me }) => {
@@ -124,10 +114,32 @@ const resolvers = {
             };
             //doing this for now since our resolvers are not connected to the db
             projects[id] = project;
-            users[me.id].messagesIds.push(id);
+            users[me.id].projectIds.push(id);
             return project;
+        },
+        deleteProject: (parent, { id }) => {
+            const { [id]: project, ...otherProjects } = projects;
+            if (!project) {
+                return false;
+            }
+
+            projects = otherProjects;
+            return true;
         }
-    }
+    },
+    Project: {
+        user: project => {
+            return users[project.userId]
+        }
+    },
+    User: {
+        projects: user => {
+            return Object.values(projects).filter(
+                project => project.userId == user.id
+            )
+        }
+    },
+
 }
 const server = new ApolloServer({
     typeDefs: schema,
