@@ -10,14 +10,14 @@ export default {
         },
         //third arg is context, can be used to inject dependencies.  Pass context in on ApolloServer initialization.
         me: async(parent, args, { me }) => {
-            return models.User.findById(me.id);
+            return models.User.findByPk(me.id);
         },
         user: async(parent, { id }, { models }) => {
-            return models.User.findById(id);
+            return models.User.findByPk(id);
         }
     }, User: {
         projects: async(user, args, { models }) => {
-            return await models.Message.findAll({
+            return await models.Project.findAll({
                 where: {
                     userId: user.id,
                 }
