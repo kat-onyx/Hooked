@@ -9,7 +9,7 @@ import { ApolloServer } from 'apollo-server-express'
 
 import schema from './schema/app';
 import resolvers from './resolvers/app';
-import models from './models/app';
+import models, { sequelize } from './models/app';
 
 const app = express();
 
@@ -82,7 +82,7 @@ const server = new ApolloServer({
     resolvers,
     context: {
         models,
-        me: models.users[1],
+       
     }
 });
 //app here is from the existing Express app. (See above.) Integrating Apollo Server with Express server.
@@ -105,5 +105,8 @@ server.applyMiddleware({ app, path: '/graphql'});
 const port = process.env.PORT || 4000;
 //Locally server will run on port 5000.
 
-app.listen(port, () => console.log('Running a GraphQL API server at localhost:4000/graphql'))
+sequelize.sync().then(async() => {
+    app.listen(port, () => console.log('Running a GraphQL API server at localhost:4000/graphql'))
+})
+
 //sends a success message when server is running successfully.

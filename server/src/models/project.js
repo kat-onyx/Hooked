@@ -13,3 +13,5 @@ const project = (sequelize, DataTypes) => {
     }
     return Project;
 }
+
+export default project;

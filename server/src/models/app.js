@@ -1,33 +1,26 @@
 
 
-let users = {
-    1: {
-        id: '1',
-        username: 'kat',
-        projectIds: [1]
-    },
-    2: {
-        id: '2',
-        username: 'jon'
-    }
-}
+import Sequelize from 'sequelize';
 
-let projects = {
-    1: {
-        id: "1",
-        description: "Luke Skywalker amigurimu, using a 5mm hook...",
-        title: "Luke Skywalker",
-        userId: "1",
+const sequelize = new Sequelize(
+    process.env.DATABASE,
+    process.env.DATABASE_USER,
+    process.env.DATABASE_PASSWORD,
+    {
+        dialect: 'postgres'
     },
-    2: {
-        id: "2",
-        description: "Yoshi amigurumi, using a 6mm hook and some green yarn.",
-        title: "Yoshi",
-        userId: "2"
-    }
-}
+);
 
-export default {
-    users,
-    projects
-}
+const models = {
+    User: sequelize.import('./user'),
+    Project: sequelize.import('./project')
+};
+
+Object.keys(models).forEach(key => {
+    if ('associate' in models[key]) {
+        models[key].associate(models);
+    }
+})
+
+export { sequelize };
+export default models;
