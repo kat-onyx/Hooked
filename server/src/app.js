@@ -105,8 +105,47 @@ server.applyMiddleware({ app, path: '/graphql'});
 const port = process.env.PORT || 4000;
 //Locally server will run on port 5000.
 
-sequelize.sync().then(async() => {
+const eraseDatabaseOnSync = true;
+
+sequelize.sync({ force: eraseDatabaseOnSync }).then(async() => {
+    if (eraseDatabaseOnSync) {
+        createUserWithProjects();
+    }
     app.listen(port, () => console.log('Running a GraphQL API server at localhost:4000/graphql'))
-})
+});
+
+const createUserWithProjects = async () => {
+    await models.User.create(
+        {
+            username: "kat",
+            email: "kat@g.com",
+            projects: [
+                {
+                    title: "Luke Skywalker Crochet",
+                    description: "Luke Skywalker made with a 5mm hook.  Brown Yarn. White Yarn. Beige Yarn."
+                },
+            ],
+        },
+        {
+            include: [models.Project],
+        }
+    );
+
+    await models.User.create(
+        {
+            username: "lauren",
+            email: "lauren@g.com",
+            projects: [
+                {
+                    title: "Toddler Clothes",
+                    description: "Toddler clothes created with soft cotton. Need a 6mm hook."
+                },
+            ],
+        },
+        {
+            include: [models.Project],
+        }
+    );
+};
 
 //sends a success message when server is running successfully.

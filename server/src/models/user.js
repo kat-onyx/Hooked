@@ -8,10 +8,10 @@ const user = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             unique: true
         },
-        password: {
-            type: DataTypes.STRING,
-            unique: true
-        }
+        // password: {
+        //     type: DataTypes.STRING,
+        //     unique: true
+        // }
     });
     //creating a hasMany relationship for User to Project.
     User.associate = models => {
