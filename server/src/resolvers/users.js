@@ -4,21 +4,27 @@ export default {
 //must add a resolver for every type of query
     Query: {
         //passing in models as context keeps these resolver functions pure.
-        users: (parent, args, { models }) => {
-            return Object.values(models.users);
+        users: async(parent, args, { models }) => {
+            //use sequelize API to talk to DB and get data correctly.
+            return await models.User.findAll();
         },
         //third arg is context, can be used to inject dependencies.  Pass context in on ApolloServer initialization.
-        me: (parent, args, { me }) => {
-            return me;
+        me: async(parent, args, { me }) => {
+            return models.User.findById(me.id);
         },
-        user: (parent, { id }, { models }) => {
-            return users[id];
+        user: async(parent, { id }, { models }) => {
+            return models.User.findById(id);
         }
     }, User: {
-        projects: (user, args, { models }) => {
-            return Object.values(models.projects).filter(
-                project => project.userId == user.id
-            )
+        projects: async(user, args, { models }) => {
+            return await models.Message.findAll({
+                where: {
+                    userId: user.id,
+                }
+            })
+            // return Object.values(models.projects).filter(
+            //     project => project.userId == user.id
+            // )
         },
     },
 };
