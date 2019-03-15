@@ -19,6 +19,7 @@ export default {
         //models are passed to resolver function as context so we don't need to import into every file.
         createProject: async(parent, { title, description }, { me, models }) => {
             //uuidv4 here will allow us to create a new project with a unique identifier.
+            //sequelize will take care of this now.
             // const id = uuidv4();
             // const project = {
             //     id,

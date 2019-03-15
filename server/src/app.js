@@ -107,6 +107,8 @@ const port = process.env.PORT || 4000;
 
 const eraseDatabaseOnSync = true;
 
+//the force flag can be used to see the db on every app startup.
+//needs to TODO: BE REMOVED FOR PROD PURPOSES SINCE ALL WILL BE WIPED.
 sequelize.sync({ force: eraseDatabaseOnSync }).then(async() => {
     if (eraseDatabaseOnSync) {
         createUserWithProjects();

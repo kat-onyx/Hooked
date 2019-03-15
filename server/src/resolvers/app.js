@@ -1,4 +1,7 @@
 import userResolvers from '../resolvers/users';
-import messageResolvers from '../resolvers/messages';
+import projectResolvers from './project';
 
-export default [userResolvers, messageResolvers];
+export default [userResolvers, projectResolvers];
+
+//sequelize is a promise based ORM so we use async/await.
+// Always returns a JS promise when operating on a db
