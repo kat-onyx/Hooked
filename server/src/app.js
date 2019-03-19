@@ -80,10 +80,10 @@ app.use(cors())
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
-    context: {
+    context: async () => ({
         models,
-       
-    }
+        me: await models.User.findByLogin('kat')
+    })
 });
 //app here is from the existing Express app. (See above.) Integrating Apollo Server with Express server.
 server.applyMiddleware({ app, path: '/graphql'});
