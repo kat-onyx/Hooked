@@ -82,7 +82,7 @@ const server = new ApolloServer({
     resolvers,
     context: async () => ({
         models,
-        me: await models.User.findByLogin('kat')
+        me: await models.User.findByLogin('lauren')
     })
 });
 //app here is from the existing Express app. (See above.) Integrating Apollo Server with Express server.
