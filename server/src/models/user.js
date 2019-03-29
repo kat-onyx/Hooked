@@ -11,12 +11,21 @@ const user = (sequelize, DataTypes) => {
         },
         email: {
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+                isEmail: true
+            }
         },
-        // password: {
-        //     type: DataTypes.STRING,
-        //     unique: true
-        // }
+        password: {
+            type: DataTypes.STRING,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+                len: [7, 42]
+            }
+        }
     });
     //creating a hasMany relationship for User to Project.
     User.associate = models => {
