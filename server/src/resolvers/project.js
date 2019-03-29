@@ -31,11 +31,16 @@ export default {
             // models.projects[id] = project;
             // models.users[me.id].projectIds.push(id);
             // return project;
-            return await models.Project.create({
-                title,
-                description,
-                userId: me.id,
-            });
+            try {
+                return await models.Project.create({
+                    title,
+                    description,
+                    userId: me.id,
+                });
+            } catch (error){
+                throw new Error(error)
+            }
+
         },
         deleteProject: async(parent, { id }, { models }) => {
             // const { [id]: project, ...otherProjects } = models.projects;

@@ -3,13 +3,20 @@ const project = (sequelize, DataTypes) => {
         title: {
             type: DataTypes.STRING,
             validate: {
-                notEmpty: true,
+                notEmpty: {
+                    //add custom errors for createProject mutation in model-level allows for specificity.
+                    args: true,
+                    msg: "Project must have a title."
+                }
             }
         },
         description: {
             type: DataTypes.TEXT,
             validate: {
-                notEmpty: true,
+                notEmpty: {
+                    args: true,
+                    msg: "Project must have a description."
+                }
             }
         }
     });
