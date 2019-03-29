@@ -14,6 +14,7 @@ const project = (sequelize, DataTypes) => {
             type: DataTypes.TEXT,
             validate: {
                 notEmpty: {
+                    //an error–be it from the database, a custom JavaScript error or another third-party–gets transformed into a valid GraphQL error result
                     args: true,
                     msg: "Project must have a description."
                 }
