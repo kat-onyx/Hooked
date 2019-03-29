@@ -133,6 +133,7 @@ const createUserWithProjects = async () => {
         {
             username: "kat",
             email: "kat@g.com",
+            password: "1234567",
             projects: [
                 {
                     title: "Luke Skywalker Crochet",
@@ -149,6 +150,7 @@ const createUserWithProjects = async () => {
         {
             username: "lauren",
             email: "lauren@g.com",
+            password: "1234567",
             projects: [
                 {
                     title: "Toddler Clothes",
