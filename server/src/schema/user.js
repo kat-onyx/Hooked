@@ -16,7 +16,7 @@ export default gql`
     type User {
         id: ID!
         username: String!
-        email: String
+        email: String!
         projects: [Project!]
     }
 `
