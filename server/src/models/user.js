@@ -1,8 +1,13 @@
 const user = (sequelize, DataTypes) => {
     const User = sequelize.define('user', {
         username: {
+            //add database level validations here in the model.
             type: DataTypes.STRING,
-            unique: true
+            unique: true,
+            allowNull: false,
+            validate: {
+                notEmpty: true,
+            }
         },
         email: {
             type: DataTypes.STRING,
