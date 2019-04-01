@@ -1,3 +1,7 @@
+const createToken = async (user) => {
+
+}
+
 export default {
 //resolvers are used to return data for fields from the schema
 //map functions that implement the schema
@@ -30,7 +34,16 @@ export default {
             //     project => project.userId == user.id
             // )
         },
-    },
+    }, Mutation: {
+        signUp: async (parent, {username, email, password}, {models}) => {
+            const user = await(models.User.create({
+                username,
+                email,
+                password
+            }));
+            return { token: createToken(user) }
+        }
+    }
 };
    // Normal User not needed here since the default query takes care of the username. Username resolver function is redundant!
     // User: {
