@@ -33,3 +33,5 @@ export default gql`
         projects: [Project!]
     }
 `
+
+//Signup Mutation takes those non-nullable arguments
