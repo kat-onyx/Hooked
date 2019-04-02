@@ -30,6 +30,7 @@ export default gql`
         id: ID!
         username: String!
         email: String!
+        password: String!
         projects: [Project!]
     }
 `
