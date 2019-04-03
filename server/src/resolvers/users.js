@@ -1,6 +1,14 @@
-const createToken = async (user) => {
+import jwt from 'jsonwebtoken';
 
-}
+//JWT token is a secure way to handle the communication between two parties (like a client and a web server)
+const createToken = async (user, secret, expiresIn) => {
+    const { id, email, username } = user;
+    //pass data and secret into sign function--expires in is extra to put a timer on the token
+    return await jwt.sign({ id, email, username }, secret, {
+        expiresIn 
+    });
+};
+
 
 export default {
 //resolvers are used to return data for fields from the schema
@@ -23,7 +31,8 @@ export default {
         user: async(parent, { id }, { models }) => {
             return models.User.findByPk(id);
         }
-    }, User: {
+    }, 
+    User: {
         projects: async(user, args, { models }) => {
             return await models.Project.findAll({
                 where: {
@@ -34,14 +43,15 @@ export default {
             //     project => project.userId == user.id
             // )
         },
-    }, Mutation: {
-        signUp: async (parent, {username, email, password}, {models}) => {
-            const user = await(models.User.create({
+    }, 
+    Mutation: {
+        signUp: async (parent, {username, email, password}, {models, secret}) => {
+            const user = await (models.User.create({
                 username,
                 email,
                 password
             }));
-            return { token: createToken(user) }
+            return { token: createToken(user, secret, '30min') }
         }
     }
 };

@@ -94,7 +94,9 @@ const server = new ApolloServer({
     },
     context: async () => ({
         models,
-        me: await models.User.findByLogin('lauren')
+        me: await models.User.findByLogin('lauren'),
+        //secret gets passed to every resolver
+        secret: process.env.SECRET,
     })
 });
 //app here is from the existing Express app. (See above.) Integrating Apollo Server with Express server.
