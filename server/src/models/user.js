@@ -46,12 +46,14 @@ const user = (sequelize, DataTypes) => {
         }
         return user;
     };
-    //hook function
+    //hook function to alter users properties before it reaches the db
     User.beforeCreate(async user => {
         user.password = await user.generatePasswordHash();
     });
+    //generatePasswordHash added to User's prototype chain, so it can execute the function on each user instance
     User.prototype.generatePasswordHash = async function() {
         const saltRounds = 10;
+        //this is referencing the user on which it is being called
         return await bcrypt.hash(this.password, saltRounds);
     }
     return User;
